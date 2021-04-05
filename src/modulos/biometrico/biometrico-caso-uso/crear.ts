@@ -23,7 +23,7 @@ export class CrearBiometricoCasoUso {
       const Conexion = await this._biometricoRepository.conexionZklib(Instancia);
       const usuarios= await this._biometricoRepository.obtenerUsuarios(Instancia);
       const ex = await this.existe(usuarios,usuario.user_id)
-      if (usuarios && !ex) {
+      if (!ex) {
         const usuarioZ= await this._biometricoRepository.crearUsuario(usuario,Instancia);
         await this._biometricoRepository.cerrarConexionZklib(Instancia);
       }else{

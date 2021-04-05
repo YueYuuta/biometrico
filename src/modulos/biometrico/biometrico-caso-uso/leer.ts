@@ -46,14 +46,7 @@ export class LeerBiometricoCasoUso {
     throw new InternalServerErrorException(error);
   }
  }
-//  async usuarioExiste(id:number,Instancia:any):Promise<any>{
-//   const Conexion = await this._biometricoRepository.conexionZklib(Instancia);
-//   const usuarios =  await this._biometricoRepository.obtenerUsuarios(Instancia);
-//    console.log(usuarios);
-//    return usuarios
-//   // return  usuarios.findIndex((x) => x.userid === id) > -1;
- 
-// }
+
 
  
 }
