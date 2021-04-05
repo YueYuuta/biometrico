@@ -1,4 +1,5 @@
-import { LeerAsistenciaModel } from "./models/leer-asistencia.model";
+
+import { CrearUsuarioModel } from "./models/crear-usuario.model";
 import { LeerUsuarioModel } from "./models/leer-usuario.model";
 
 
@@ -12,4 +13,5 @@ export interface IBiometricoCasoUso {
   cerrarConexionZklib(Instancia:any):Promise<any>;
   cerrarConexionNodeZklib(Instancia:any):Promise<any>;
   eliminarRegistrosAsistencia(Instancia:any):Promise<any>;
+  crearUsuario(usuario:CrearUsuarioModel,instancia:any):Promise<any>;
 }

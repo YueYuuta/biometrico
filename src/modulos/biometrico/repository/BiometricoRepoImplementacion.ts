@@ -3,6 +3,7 @@ import {
 } from '@nestjs/common';
 import { credenciales } from 'src/enums/credenciales.enum';
 import { IBiometricoCasoUso } from '../biometrico-caso-uso/IBiometricoCasoUso';
+import { CrearUsuarioModel } from '../biometrico-caso-uso/models/crear-usuario.model';
 import { LeerAsistenciaModel } from '../biometrico-caso-uso/models/leer-asistencia.model';
 import { LeerUsuarioModel } from '../biometrico-caso-uso/models/leer-usuario.model';
 const ZKLib = require('zklib');
@@ -12,6 +13,15 @@ const NZKLib = require('../../../../node_modules/node-zklib')
 @Injectable()
 export class BiometricoRepoService implements IBiometricoCasoUso {
   constructor() {}
+  crearUsuario(usuario: CrearUsuarioModel,Instancia:any): Promise<any> {
+    return new Promise((resolve,reject)=>{
+      Instancia.setUser(usuario.user_id,usuario.password,usuario.name,usuario.user_id,function(err, result){
+        if (err) reject(err);
+              resolve(result);
+      });
+    })
+    
+  }
   async eliminarRegistrosAsistencia(Instancia: any): Promise<any> {
     Instancia.clearAttendanceLog();
   }
