@@ -17,7 +17,9 @@ export class AppController {
 
   @Get('bio')
   async getHello(): Promise<void> {
-    await this.bio();
+  //  const result = await this.appService.conexion();
+  //  console.log(result);
+    // await this.bio();
 
   // this.ZK.setUser()
   //   return this.appService.getHello();
@@ -28,7 +30,7 @@ export class AppController {
     try {
         // Create socket to machine 
         await zkInstance.createSocket()
-console.LOG('SSDFSADF')
+
 
         // Get general info like logCapacity, user counts, logs count
         // It's really useful to check the status of device 
@@ -48,16 +50,33 @@ console.LOG('SSDFSADF')
    console.log('informacion', info);
    
 
-    const datos = await zkInstance.executeCmd('CMD_DELETE_USER','4')
-    console.log('consolas',datos);
+    // const datos = await zkInstance.executeCmd('CMD_DELETE_USER','4')
+    // console.log('consolas',datos);
 
 
-     await zkInstance.getAttendances((data)=>{
-          // do something when some checkin 
-          console.log(data)
-      })
+    //  await zkInstance.getAttendances((data)=>{
+    //       // do something when some checkin 
+    //       console.log(data)
+    //   })
       const logs = await zkInstance.getAttendances()
-     console.log(logs)
+     console.log('logs normales',logs)
+
+    //  const reallogs = await zkInstance.executeCmd(1017,'')
+    //  console.log('real time logs',reallogs)
+     
+
+    //  const attendances = await zkInstance.getAttendances((percent, total)=>{
+    //    console.log('porcentaje',percent)
+    //    console.log('total',total)
+    //     // this callbacks take params is the percent of data downloaded and total data need to download 
+    // })
+    // console.log('attendances',attendances)
+
+  //   zkInstance.getRealTimeLogs((data)=>{
+  //     // do something when some checkin 
+  //     console.log('datos tiempo',data)
+  // })
+     
     
 
     
@@ -107,7 +126,7 @@ console.LOG('SSDFSADF')
 //       timeout: 5000,
 //     });
 
-//     ZK.connect(function(err) {
+//     ZK.connect(async function(err) {
 //       if (err) throw err;
      
 //       // read the time info from th device
@@ -116,21 +135,32 @@ console.LOG('SSDFSADF')
        
 //         console.log('usuarios',t)
 //       });
+//       const logs = await ZK.getAttendance()
+//     console.log(logs)
 
-//       ZK.enrollUser(3,async function (err, t) {
-//         // disconnect from the device
+//       // ZK.enrollUser(3,async function (err, t) {
+//       //   // disconnect from the device
        
-//         console.log('enrol',t.toString())
-//       })
+//       //   console.log('enrol',t.toString())
+//       // })
 
-//       ZK.getAttendance(3,async function (err, t) {
+//       ZK.getAttendance(async function (err, t) {
 //         // disconnect from the device
        
 //         console.log('atte',t)
 //       })
+
+//          // Get all logs in the machine 
+//     // Currently, there is no filter to take data, it just takes all !!
+  
+
+//       // ZK.executeCmd(13,'',async function(err,respuesta){
+//       //   console.log('replica',respuesta)
+//       // })
 //       // ZK.setUser(4,'','Ingrid',4);
 //       // ZK.delUser(4);
 //     });
+      
 
 //     // ZK.connect(function(err) {
 //     //   if (err) throw err;
