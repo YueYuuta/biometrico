@@ -13,6 +13,14 @@ const NZKLib = require('../../../../node_modules/node-zklib')
 @Injectable()
 export class BiometricoRepoService implements IBiometricoCasoUso {
   constructor() {}
+  async eliminarUsuario(id: number, Instancia: any): Promise<any> {
+    return new Promise((resolve,reject)=>{
+      Instancia.delUser(id,function(err, result){
+        if (err) reject(err);
+              resolve(result);
+      });
+    })
+  }
   crearUsuario(usuario: CrearUsuarioModel,Instancia:any): Promise<any> {
     return new Promise((resolve,reject)=>{
       Instancia.setUser(usuario.user_id,usuario.password,usuario.name,usuario.user_id,function(err, result){

@@ -11,8 +11,6 @@ import { EliminarBiometricoCasoUso } from '../biometrico-caso-uso/eliminar';
 import { LeerBiometricoCasoUso } from '../biometrico-caso-uso/leer';
 import { CrearUsuarioDto } from './dto';
 
-
-// @UseGuarKds(AuthGuard('jwt'))
 @Controller('biometrico')
 export class BiometricoController {
   constructor(
@@ -52,9 +50,21 @@ export class BiometricoController {
     };
   }
 
+  @Delete('eliminar/usuario/:id/:ip/:puerto')
+  async eliminarUsuario(@Param('puerto', ParseIntPipe) puerto: number,
+  @Param('ip') ip: string,@Param('id', ParseIntPipe) id: number,):Promise<SalidaApi>{
+     const respuesta= await this._EliminarBiometricoService.eliminar(id,ip,puerto);
+     return {
+      status: HttpStatus.OK,
+      data: respuesta,
+      message:'Usuario eliminado coreectamente!'
+    };
+  }
+
   @Post('crear/usuario')
   @UsePipes(new ValidationPipe({ transform: true }))
   async crearUsuario(@Body() usuario: CrearUsuarioDto):Promise<SalidaApi>{
+
      const respuesta= await this._CrearBiometricoService.crear(usuario);
      return {
       status: HttpStatus.OK,
