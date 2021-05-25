@@ -21,14 +21,14 @@ export class CrearBiometricoCasoUso {
      
       Instancia = await this._biometricoRepository.instanciaZklib(usuario.ip,usuario.puerto);
       const Conexion = await this._biometricoRepository.conexionZklib(Instancia);
-      const usuarios= await this._biometricoRepository.obtenerUsuarios(Instancia);
-      const ex = await this.existe(usuarios,usuario.user_id)
-      if (!ex) {
+      // const usuarios= await this._biometricoRepository.obtenerUsuarios(Instancia);
+      // const ex = await this.existe(usuarios,usuario.user_id)
+      // if (!ex) {
         const usuarioZ= await this._biometricoRepository.crearUsuario(usuario,Instancia);
         await this._biometricoRepository.cerrarConexionZklib(Instancia);
-      }else{
-        throw new ConflictException(`El usuario con id:${usuario.user_id} ya existe!`);
-      }
+      // }else{
+      //   throw new ConflictException(`El usuario con id:${usuario.user_id} ya existe!`);
+      // }
       return true;
     } catch (error) {
       await this._biometricoRepository.cerrarConexionZklib(Instancia);

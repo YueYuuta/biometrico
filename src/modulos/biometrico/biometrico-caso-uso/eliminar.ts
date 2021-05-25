@@ -16,14 +16,14 @@ export class EliminarBiometricoCasoUso {
      
       Instancia = await this._biometricoRepository.instanciaZklib(ip,puerto);
       const Conexion = await this._biometricoRepository.conexionZklib(Instancia);
-      const usuarios= await this._biometricoRepository.obtenerUsuarios(Instancia);
-      const ex = await this.existe(usuarios,id)
-      if (usuarios && ex) {
+      // const usuarios= await this._biometricoRepository.obtenerUsuarios(Instancia);
+      // const ex = await this.existe(usuarios,id)
+      // if (usuarios) {
         const usuarioZ= await this._biometricoRepository.eliminarUsuario(id,Instancia);
         await this._biometricoRepository.cerrarConexionZklib(Instancia);
-      }else{
-        throw new ConflictException(`El usuario con id:${id} no existe!`);
-      }
+      // }else{
+      //   throw new ConflictException(`El usuario con id:${id} no existe!`);
+      // }
       return true;
     } catch (error) {
       await this._biometricoRepository.cerrarConexionZklib(Instancia);
