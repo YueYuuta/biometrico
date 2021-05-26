@@ -1,10 +1,10 @@
-import {  ConflictException, Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {  ConflictException, Inject, Injectable, InternalServerErrorException, Scope } from '@nestjs/common';
 import { IBiometricoCasoUso } from './IBiometricoCasoUso';
 import { LeerUsuarioModel } from './models/leer-usuario.model';
 
 
 const BiometricoRepo = () => Inject('BiometricoRepo');
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class EliminarBiometricoCasoUso {
   constructor(
     @BiometricoRepo() private readonly _biometricoRepository: IBiometricoCasoUso,

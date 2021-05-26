@@ -2,7 +2,7 @@
 import {
   
   Body,
-  Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Post, UsePipes, ValidationPipe,
+  Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Post, Scope, UsePipes, ValidationPipe,
  
 } from '@nestjs/common';
 import { SalidaApi } from 'src/modulos/shared/models/salida-api';
@@ -11,7 +11,10 @@ import { EliminarBiometricoCasoUso } from '../biometrico-caso-uso/eliminar';
 import { LeerBiometricoCasoUso } from '../biometrico-caso-uso/leer';
 import { CrearUsuarioDto } from './dto';
 
-@Controller('biometrico')
+@Controller({
+  path: 'biometrico',
+  scope: Scope.REQUEST,
+})
 export class BiometricoController {
   constructor(
    private readonly _leerBiometricoService:LeerBiometricoCasoUso,

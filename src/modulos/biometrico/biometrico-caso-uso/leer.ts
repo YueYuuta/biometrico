@@ -1,4 +1,4 @@
-import { Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException, Scope } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { LeerAsistenciaDto } from '../api/dto/leer-asistencia.dto';
 import { LeerUsuarioDto } from '../api/dto/leer-usuario.dto';
@@ -7,7 +7,7 @@ import { LeerAsistenciaModel } from './models/leer-asistencia.model';
 import { LeerUsuarioModel } from './models/leer-usuario.model';
 
 const BiometricoRepo = () => Inject('BiometricoRepo');
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class LeerBiometricoCasoUso {
   constructor(
     @BiometricoRepo() private readonly _biometricoRepository: IBiometricoCasoUso,

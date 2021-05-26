@@ -1,5 +1,5 @@
 import {
-  Injectable
+  Injectable, Scope
 } from '@nestjs/common';
 import { credenciales } from 'src/enums/credenciales.enum';
 import { IBiometricoCasoUso } from '../biometrico-caso-uso/IBiometricoCasoUso';
@@ -10,7 +10,7 @@ const ZKLib = require('zklib');
 const NZKLib = require('../../../../node_modules/node-zklib')
 
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class BiometricoRepoService implements IBiometricoCasoUso {
   constructor() {}
   async eliminarUsuario(id: number, Instancia: any): Promise<any> {
