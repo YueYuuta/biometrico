@@ -62,11 +62,12 @@ export class BiometricoController {
   @Delete('eliminar/usuario/:id/:ip/:puerto')
   async eliminarUsuario(@Param('puerto', ParseIntPipe) puerto: number,
   @Param('ip') ip: string,@Param('id', ParseIntPipe) id: number,):Promise<any>{
+    console.log("eliminar/usuario/:id/:ip/:puerto");
     const ZK = new ZKLib({
       ip: ip,
       port: puerto,
-      // inport: 5200,
-      // timeout: 5000,
+      inport: 5200,
+      timeout: 5000,
     });
 
     ZK.connect(function(err) {
@@ -87,8 +88,8 @@ export class BiometricoController {
       const ZK = new ZKLib({
         ip: "172.16.236.202",
         port: 4370,
-        // inport: 5200,
-        // timeout: 5000,
+        inport: 5200,
+        timeout: 5000,
       });
   
       ZK.connect(id,function(err) {
@@ -104,7 +105,7 @@ export class BiometricoController {
           console.log("Eliminado");
         });
       });
-    }, 3000);
+    }, 10000);
     // console.log("elimminar usuario",ip,puerto);
     //  const respuesta= await this._EliminarBiometricoService.eliminar(id,ip,puerto);
     //  return {
