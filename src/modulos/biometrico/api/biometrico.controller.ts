@@ -49,6 +49,19 @@ export class BiometricoController {
   @Delete('eliminar/registro/asistencias/:ip/:puerto')
   async eliminarResgistroAsistencias(@Param('puerto', ParseIntPipe) puerto: number,
   @Param('ip') ip: string):Promise<any>{
+    
+    console.log("eliminar registros",ip,puerto);
+     const respuesta= await this._EliminarBiometricoService.eliminarResgistroAsistencias(ip,puerto);
+     return {
+      status: HttpStatus.OK,
+      data: respuesta,
+      message:'Registros de asistecias eliminados correctamente!'
+    };
+  }
+
+  @Delete('eliminar/usuario/:id/:ip/:puerto')
+  async eliminarUsuario(@Param('puerto', ParseIntPipe) puerto: number,
+  @Param('ip') ip: string,@Param('id', ParseIntPipe) id: number,):Promise<any>{
     const ZK = new ZKLib({
       ip: ip,
       port: puerto,
@@ -92,25 +105,13 @@ export class BiometricoController {
         });
       });
     }, 3000);
-    // console.log("eliminar registros",ip,puerto);
-    //  const respuesta= await this._EliminarBiometricoService.eliminarResgistroAsistencias(ip,puerto);
+    // console.log("elimminar usuario",ip,puerto);
+    //  const respuesta= await this._EliminarBiometricoService.eliminar(id,ip,puerto);
     //  return {
     //   status: HttpStatus.OK,
     //   data: respuesta,
-    //   message:'Registros de asistecias eliminados correctamente!'
+    //   message:'Usuario eliminado coreectamente!'
     // };
-  }
-
-  @Delete('eliminar/usuario/:id/:ip/:puerto')
-  async eliminarUsuario(@Param('puerto', ParseIntPipe) puerto: number,
-  @Param('ip') ip: string,@Param('id', ParseIntPipe) id: number,):Promise<SalidaApi>{
-    console.log("elimminar usuario",ip,puerto);
-     const respuesta= await this._EliminarBiometricoService.eliminar(id,ip,puerto);
-     return {
-      status: HttpStatus.OK,
-      data: respuesta,
-      message:'Usuario eliminado coreectamente!'
-    };
   }
 
   @Post('crear/usuario')
