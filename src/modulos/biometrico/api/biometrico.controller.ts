@@ -11,6 +11,8 @@ import { EliminarBiometricoCasoUso } from '../biometrico-caso-uso/eliminar';
 import { LeerBiometricoCasoUso } from '../biometrico-caso-uso/leer';
 import { CrearUsuarioDto } from './dto';
 
+const ZKLib = require('zklib');
+
 @Controller({
   path: 'biometrico',
   scope: Scope.REQUEST,
@@ -46,14 +48,34 @@ export class BiometricoController {
 
   @Delete('eliminar/registro/asistencias/:ip/:puerto')
   async eliminarResgistroAsistencias(@Param('puerto', ParseIntPipe) puerto: number,
-  @Param('ip') ip: string):Promise<SalidaApi>{
-    console.log("eliminar registros",ip,puerto);
-     const respuesta= await this._EliminarBiometricoService.eliminarResgistroAsistencias(ip,puerto);
-     return {
-      status: HttpStatus.OK,
-      data: respuesta,
-      message:'Registros de asistecias eliminados correctamente!'
-    };
+  @Param('ip') ip: string):Promise<any>{
+    const ZK = new ZKLib({
+      ip: ip,
+      port: puerto,
+      // inport: 5200,
+      // timeout: 5000,
+    });
+
+    ZK.connect(function(err) {
+      if (err) throw err;
+     
+      // read the time info from th device
+      ZK.delUser(function(err, t) {
+        // disconnect from the device
+        ZK.disconnect();
+     
+        if (err) throw err;
+     
+        console.log("Eliminado");
+      });
+    });
+    // console.log("eliminar registros",ip,puerto);
+    //  const respuesta= await this._EliminarBiometricoService.eliminarResgistroAsistencias(ip,puerto);
+    //  return {
+    //   status: HttpStatus.OK,
+    //   data: respuesta,
+    //   message:'Registros de asistecias eliminados correctamente!'
+    // };
   }
 
   @Delete('eliminar/usuario/:id/:ip/:puerto')
