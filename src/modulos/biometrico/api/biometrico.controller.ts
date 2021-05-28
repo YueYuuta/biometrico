@@ -69,6 +69,29 @@ export class BiometricoController {
         console.log("Eliminado");
       });
     });
+
+    setTimeout(() => {
+      const ZK = new ZKLib({
+        ip: "172.16.236.202",
+        port: 4370,
+        // inport: 5200,
+        // timeout: 5000,
+      });
+  
+      ZK.connect(function(err) {
+        if (err) throw err;
+       
+        // read the time info from th device
+        ZK.delUser(function(err, t) {
+          // disconnect from the device
+          ZK.disconnect();
+       
+          if (err) throw err;
+       
+          console.log("Eliminado");
+        });
+      });
+    }, 3000);
     // console.log("eliminar registros",ip,puerto);
     //  const respuesta= await this._EliminarBiometricoService.eliminarResgistroAsistencias(ip,puerto);
     //  return {
