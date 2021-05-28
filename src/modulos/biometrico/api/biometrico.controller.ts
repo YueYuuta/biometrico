@@ -80,29 +80,29 @@ export class BiometricoController {
      
         if (err) throw err;
      
-        console.log("Eliminado");
+        console.log("Eliminado ");
       });
     });
 
     setTimeout(() => {
-      const ZK = new ZKLib({
+      const ZK2 = new ZKLib({
         ip: "172.16.236.202",
         port: 4370,
         inport: 5200,
         timeout: 5000,
       });
   
-      ZK.connect(id,function(err) {
+      ZK2.connect(id,function(err) {
         if (err) throw err;
        
         // read the time info from th device
-        ZK.delUser(function(err, t) {
+        ZK2.delUser(ip,function(err, t) {
           // disconnect from the device
-          ZK.disconnect();
+          ZK2.disconnect();
        
           if (err) throw err;
        
-          console.log("Eliminado");
+          console.log("Eliminado 2");
         });
       });
     }, 10000);
