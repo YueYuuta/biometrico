@@ -79,14 +79,14 @@ export class BiometricoController {
         timeout: timeout,
       });
       console.log("instancia",ZK);
-      ZK.connect(function(err) {
+      ZK.connect(async function(err) {
         if (err) throw new InternalServerErrorException(err);
         
        
         // read the time info from th device
-        ZK.delUser(id,function(err, t) {
+        await ZK.delUser(id,async function(err, t:any) {
           // disconnect from the device
-          ZK.disconnect();
+         await ZK.disconnect();
           ZK = null;
           
        
