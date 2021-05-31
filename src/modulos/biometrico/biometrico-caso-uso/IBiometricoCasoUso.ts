@@ -14,5 +14,5 @@ export interface IBiometricoCasoUso {
   cerrarConexionNodeZklib(Instancia:any):Promise<any>;
   eliminarRegistrosAsistencia(Instancia:any):Promise<any>;
   crearUsuario(usuario:CrearUsuarioModel,instancia:any):Promise<any>;
-  eliminarUsuario(id:number,instancia:any):Promise<any>;
+  eliminarUsuario(id:number,ip:string,puerto:number):Promise<any>;
 }

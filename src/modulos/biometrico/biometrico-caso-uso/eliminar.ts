@@ -11,24 +11,32 @@ export class EliminarBiometricoCasoUso {
   ) {}
 
   async eliminar(id:number,ip:string,puerto:number): Promise<any> {
-    let Instancia;
     try {
-     
-      Instancia = await this._biometricoRepository.instanciaZklib(ip,puerto);
-      const Conexion = await this._biometricoRepository.conexionZklib(Instancia);
-      // const usuarios= await this._biometricoRepository.obtenerUsuarios(Instancia);
-      // const ex = await this.existe(usuarios,id)
-      // if (usuarios) {
-        const usuarioZ= await this._biometricoRepository.eliminarUsuario(id,Instancia);
-        await this._biometricoRepository.cerrarConexionZklib(Instancia);
-      // }else{
-      //   throw new ConflictException(`El usuario con id:${id} no existe!`);
-      // }
-      return true;
+      const salida = await this._biometricoRepository.eliminarUsuario(id,ip,puerto);
+      return salida;
     } catch (error) {
-      await this._biometricoRepository.cerrarConexionZklib(Instancia);
       throw new InternalServerErrorException(error);
+      
     }
+   
+    // let Instancia;
+    // try {
+     
+    //   Instancia = await this._biometricoRepository.instanciaZklib(ip,puerto);
+    //   const Conexion = await this._biometricoRepository.conexionZklib(Instancia);
+    //   // const usuarios= await this._biometricoRepository.obtenerUsuarios(Instancia);
+    //   // const ex = await this.existe(usuarios,id)
+    //   // if (usuarios) {
+    //     const usuarioZ= await this._biometricoRepository.eliminarUsuario(id,Instancia);
+    //     await this._biometricoRepository.cerrarConexionZklib(Instancia);
+    //   // }else{
+    //   //   throw new ConflictException(`El usuario con id:${id} no existe!`);
+    //   // }
+    //   return true;
+    // } catch (error) {
+    //   await this._biometricoRepository.cerrarConexionZklib(Instancia);
+    //   throw new InternalServerErrorException(error);
+    // }
   }
 
   async existe(usuarios:LeerUsuarioModel[],id:number):Promise<boolean>{

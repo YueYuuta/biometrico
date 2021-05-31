@@ -1,9 +1,16 @@
-
 import {
-  
   Body,
-  Controller, Delete, Get, HttpStatus, InternalServerErrorException, Param, ParseIntPipe, Post, Scope, UsePipes, ValidationPipe,
- 
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  InternalServerErrorException,
+  Param,
+  ParseIntPipe,
+  Post,
+  Scope,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { SalidaApi } from 'src/modulos/shared/models/salida-api';
 import { CrearBiometricoCasoUso } from '../biometrico-caso-uso/crear';
@@ -19,86 +26,104 @@ const ZKLib = require('zklib');
 })
 export class BiometricoController {
   constructor(
-   private readonly _leerBiometricoService:LeerBiometricoCasoUso,
-   private readonly _EliminarBiometricoService:EliminarBiometricoCasoUso,
-   private readonly _CrearBiometricoService:CrearBiometricoCasoUso
+    private readonly _leerBiometricoService: LeerBiometricoCasoUso,
+    private readonly _EliminarBiometricoService: EliminarBiometricoCasoUso,
+    private readonly _CrearBiometricoService: CrearBiometricoCasoUso,
   ) {}
 
   @Get('usuarios/:ip/:puerto')
-  async obtenerUsuarios(@Param('puerto', ParseIntPipe) puerto: number,
-  @Param('ip') ip: string):Promise<SalidaApi>{
-    console.log("obtener usuarios",ip,puerto);
-     const respuesta= await this._leerBiometricoService.obtenerUsuarios(ip,puerto);
-     return {
+  async obtenerUsuarios(
+    @Param('puerto', ParseIntPipe) puerto: number,
+    @Param('ip') ip: string,
+  ): Promise<SalidaApi> {
+    console.log('obtener usuarios', ip, puerto);
+    const respuesta = await this._leerBiometricoService.obtenerUsuarios(
+      ip,
+      puerto,
+    );
+    return {
       status: HttpStatus.OK,
       data: respuesta,
     };
   }
 
   @Get('asistencias/:ip/:puerto')
-  async obtenerResgistroAsistencia(@Param('puerto', ParseIntPipe) puerto: number,
-  @Param('ip') ip: string):Promise<SalidaApi>{
-    console.log("asistencias",ip,puerto);
-     const respuesta= await this._leerBiometricoService.obtenerRegistroAsistencias(ip,puerto);
-     return {
+  async obtenerResgistroAsistencia(
+    @Param('puerto', ParseIntPipe) puerto: number,
+    @Param('ip') ip: string,
+  ): Promise<SalidaApi> {
+    console.log('asistencias', ip, puerto);
+    const respuesta = await this._leerBiometricoService.obtenerRegistroAsistencias(
+      ip,
+      puerto,
+    );
+    return {
       status: HttpStatus.OK,
       data: respuesta,
     };
   }
 
   @Delete('eliminar/registro/asistencias/:ip/:puerto')
-  async eliminarResgistroAsistencias(@Param('puerto', ParseIntPipe) puerto: number,
-  @Param('ip') ip: string):Promise<any>{
-    
-    console.log("eliminar registros",ip,puerto);
-     const respuesta= await this._EliminarBiometricoService.eliminarResgistroAsistencias(ip,puerto);
-     return {
+  async eliminarResgistroAsistencias(
+    @Param('puerto', ParseIntPipe) puerto: number,
+    @Param('ip') ip: string,
+  ): Promise<any> {
+    console.log('eliminar registros', ip, puerto);
+    const respuesta = await this._EliminarBiometricoService.eliminarResgistroAsistencias(
+      ip,
+      puerto,
+    );
+    return {
       status: HttpStatus.OK,
       data: respuesta,
-      message:'Registros de asistecias eliminados correctamente!'
+      message: 'Registros de asistecias eliminados correctamente!',
     };
   }
 
   @Delete('eliminar/usuario/:id/:ip/:puerto')
-  async eliminarUsuario(@Param('puerto', ParseIntPipe) puerto: number,
-  @Param('ip') ip: string,@Param('id', ParseIntPipe) id: number,):Promise<any>{
-    
-    
-    console.log("eliminar/usuario/:id/:ip/:puerto");
-    console.log(ip,puerto);
-    const ips = ["172.16.236.202","172.16.236.102"];
-    for (const iterator of ips) {
-      let inport= Math.random() * (6000 - 5000) + 5000;
-      let timeout= Math.random() * (6000 - 5000) + 5000;
-      inport= Math.trunc(inport);
-      timeout= Math.trunc(timeout);
-      let ZK = new ZKLib({
-        ip: iterator,
-        port: puerto,
-        inport: inport,
-        timeout: timeout,
-      });
-      console.log("instancia",ZK);
-     await ZK.connect(async function(err) {
-        if (err) throw new InternalServerErrorException(err);
-        
-       
-        // read the time info from th device
-        await ZK.delUser(id,async function(err, t:any) {
-          // disconnect from the device
-         await ZK.disconnect();
-          ZK = null;
-          
-       
-          if (err) throw new InternalServerErrorException(err);
-       
-          console.log("Eliminado ");
-        });
-      });
-    }
-   
-   
-   
+  async eliminarUsuario(
+    @Param('puerto', ParseIntPipe) puerto: number,
+    @Param('ip') ip: string,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<any> {
+    console.log('eliminar/usuario/:id/:ip/:puerto');
+    console.log(ip, puerto);
+    // const ips = ["172.16.236.202","172.16.236.102"];
+    // for (const iterator of ips) {
+    const salida = await this._EliminarBiometricoService.eliminar(
+      id,
+      ip,
+      puerto,
+    );
+    console.log(salida);
+    return salida;
+    //   let inport= Math.random() * (6000 - 5000) + 5000;
+    //   let timeout= Math.random() * (6000 - 5000) + 5000;
+    //   inport= Math.trunc(inport);
+    //   timeout= Math.trunc(timeout);
+    //   let ZK = new ZKLib({
+    //     ip: iterator,
+    //     port: puerto,
+    //     inport: inport,
+    //     timeout: timeout,
+    //   });
+    //   console.log("instancia",ZK);
+    //  await ZK.connect(async function(err) {
+    //     if (err) throw new InternalServerErrorException(err);
+
+    //     // read the time info from th device
+    //     await ZK.delUser(id,async function(err, t:any) {
+    //       // disconnect from the device
+    //      await ZK.disconnect();
+    //       ZK = null;
+
+    //       if (err) throw new InternalServerErrorException(err);
+
+    //       console.log("Eliminado ");
+    //     });
+    //   });
+    //}
+
     // const ZK2 = new ZKLib({
     //   ip: "172.16.236.202",
     //   port: 4370,
@@ -108,18 +133,18 @@ export class BiometricoController {
 
     // ZK2.connect(function(err) {
     //   if (err) throw new InternalServerErrorException(err);
-      
+
     //   // read the time info from th device
     //   ZK2.delUser(id,function(err, t) {
     //     // disconnect from the device
     //     ZK2.disconnect();
-      
+
     //     if (err) throw new InternalServerErrorException(err);
-      
+
     //     console.log("Eliminado 2");
     //   });
     // });
-  
+
     // console.log("elimminar usuario",ip,puerto);
     //  const respuesta= await this._EliminarBiometricoService.eliminar(id,ip,puerto);
     //  return {
@@ -131,14 +156,13 @@ export class BiometricoController {
 
   @Post('crear/usuario')
   @UsePipes(new ValidationPipe({ transform: true }))
-  async crearUsuario(@Body() usuario: CrearUsuarioDto):Promise<SalidaApi>{
-    console.log("obtener usuarios",usuario.ip,usuario.puerto);
-     const respuesta= await this._CrearBiometricoService.crear(usuario);
-     return {
+  async crearUsuario(@Body() usuario: CrearUsuarioDto): Promise<SalidaApi> {
+    console.log('obtener usuarios', usuario.ip, usuario.puerto);
+    const respuesta = await this._CrearBiometricoService.crear(usuario);
+    return {
       status: HttpStatus.OK,
       data: respuesta,
-      message:'usuario creado correctamente!'
+      message: 'usuario creado correctamente!',
     };
   }
-  
 }
