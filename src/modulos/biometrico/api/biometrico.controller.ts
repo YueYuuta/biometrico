@@ -80,13 +80,14 @@ export class BiometricoController {
         ZK.disconnect();
         
      
-        if (err) throw err;
+        if (err) console.log(err);
      
         console.log("Eliminado ");
       });
     });
 
     setTimeout(() => {
+      console.log("set time")
       const ZK2 = new ZKLib({
         ip: "172.16.236.202",
         port: 4370,
