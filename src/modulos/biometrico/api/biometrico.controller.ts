@@ -63,6 +63,7 @@ export class BiometricoController {
   async eliminarUsuario(@Param('puerto', ParseIntPipe) puerto: number,
   @Param('ip') ip: string,@Param('id', ParseIntPipe) id: number,):Promise<any>{
     console.log("eliminar/usuario/:id/:ip/:puerto");
+    console.log(ip,puerto);
     const ZK = new ZKLib({
       ip: ip,
       port: puerto,
