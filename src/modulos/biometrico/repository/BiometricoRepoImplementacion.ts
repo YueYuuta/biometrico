@@ -23,11 +23,11 @@ export class BiometricoRepoService implements IBiometricoCasoUso {
         timeout: 5000,
       });
       console.log('instancia', ZK);
-      ZK.connect(async function (err) {
+      ZK.connect(function (err) {
         if (err) reject(err);
 
         // read the time info from th device
-        ZK.delUser(id, async function (err, t: any) {
+        ZK.delUser(id, function (err, t: any) {
           // disconnect from the device
           ZK.disconnect();
           ZK = null;
