@@ -77,6 +77,7 @@ export class BiometricoController {
       ZK.delUser(id,function(err, t) {
         // disconnect from the device
         ZK.disconnect();
+        
      
         if (err) throw err;
      
@@ -92,11 +93,11 @@ export class BiometricoController {
         timeout: 5000,
       });
   
-      ZK2.connect(id,function(err) {
+      ZK2.connect(function(err) {
         if (err) throw err;
        
         // read the time info from th device
-        ZK2.delUser(ip,function(err, t) {
+        ZK2.delUser(id,function(err, t) {
           // disconnect from the device
           ZK2.disconnect();
        
