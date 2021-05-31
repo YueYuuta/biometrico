@@ -2,7 +2,7 @@
 import {
   
   Body,
-  Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Post, Scope, UsePipes, ValidationPipe,
+  Controller, Delete, Get, HttpStatus, InternalServerErrorException, Param, ParseIntPipe, Post, Scope, UsePipes, ValidationPipe,
  
 } from '@nestjs/common';
 import { SalidaApi } from 'src/modulos/shared/models/salida-api';
@@ -64,7 +64,7 @@ export class BiometricoController {
   @Param('ip') ip: string,@Param('id', ParseIntPipe) id: number,):Promise<any>{
     console.log("eliminar/usuario/:id/:ip/:puerto");
     console.log(ip,puerto);
-    const ZK = new ZKLib({
+    let ZK = new ZKLib({
       ip: ip,
       port: puerto,
       inport: 5200,
@@ -72,43 +72,42 @@ export class BiometricoController {
     });
 
     ZK.connect(function(err) {
-      if (err) throw err;
+      if (err) throw new InternalServerErrorException(err);
+      ;
      
       // read the time info from th device
       ZK.delUser(id,function(err, t) {
         // disconnect from the device
         ZK.disconnect();
+        ZK = null;
         
      
-        if (err) console.log(err);
+        if (err) throw new InternalServerErrorException(err);
      
         console.log("Eliminado ");
       });
     });
+    // const ZK2 = new ZKLib({
+    //   ip: "172.16.236.202",
+    //   port: 4370,
+    //   inport: 5200,
+    //   timeout: 5000,
+    // });
 
-    setTimeout(() => {
-      console.log("set time")
-      const ZK2 = new ZKLib({
-        ip: "172.16.236.202",
-        port: 4370,
-        inport: 5200,
-        timeout: 5000,
-      });
+    // ZK2.connect(function(err) {
+    //   if (err) throw new InternalServerErrorException(err);
+      
+    //   // read the time info from th device
+    //   ZK2.delUser(id,function(err, t) {
+    //     // disconnect from the device
+    //     ZK2.disconnect();
+      
+    //     if (err) throw new InternalServerErrorException(err);
+      
+    //     console.log("Eliminado 2");
+    //   });
+    // });
   
-      ZK2.connect(function(err) {
-        if (err) throw err;
-       
-        // read the time info from th device
-        ZK2.delUser(id,function(err, t) {
-          // disconnect from the device
-          ZK2.disconnect();
-       
-          if (err) throw err;
-       
-          console.log("Eliminado 2");
-        });
-      });
-    }, 10000);
     // console.log("elimminar usuario",ip,puerto);
     //  const respuesta= await this._EliminarBiometricoService.eliminar(id,ip,puerto);
     //  return {
