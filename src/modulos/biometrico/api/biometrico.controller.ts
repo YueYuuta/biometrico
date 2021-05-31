@@ -79,7 +79,7 @@ export class BiometricoController {
         timeout: timeout,
       });
       console.log("instancia",ZK);
-      ZK.connect(async function(err) {
+     await ZK.connect(async function(err) {
         if (err) throw new InternalServerErrorException(err);
         
        
