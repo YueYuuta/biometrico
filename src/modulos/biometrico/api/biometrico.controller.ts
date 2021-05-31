@@ -126,28 +126,28 @@ export class BiometricoController {
     });
     //}
 
-    setTimeout(() => {
-      const ZK2 = new ZKLib({
-        ip: ip2,
-        port: puerto2,
-        inport: 5200,
-        timeout: 5000,
-      });
-      console.log('instancia↓↓↓↓', ZK);
-      ZK2.connect(function (err) {
+    // setTimeout(() => {
+    const ZK2 = new ZKLib({
+      ip: ip2,
+      port: puerto2,
+      inport: 5200,
+      timeout: 5000,
+    });
+    console.log('instancia↓↓↓↓', ZK);
+    ZK2.connect(function (err) {
+      if (err) throw new InternalServerErrorException(err);
+
+      // read the time info from th device
+      ZK2.delUser(id, function (err, t) {
+        // disconnect from the device
+        ZK2.disconnect();
+
         if (err) throw new InternalServerErrorException(err);
 
-        // read the time info from th device
-        ZK2.delUser(id, function (err, t) {
-          // disconnect from the device
-          ZK2.disconnect();
-
-          if (err) throw new InternalServerErrorException(err);
-
-          console.log('Eliminado 2');
-        });
+        console.log('Eliminado 2');
       });
-    }, 10000);
+    });
+    // }, 10000);
 
     // console.log("elimminar usuario",ip,puerto);
     //  const respuesta= await this._EliminarBiometricoService.eliminar(id,ip,puerto);
