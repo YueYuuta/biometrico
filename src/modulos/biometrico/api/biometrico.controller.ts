@@ -80,74 +80,34 @@ export class BiometricoController {
     };
   }
 
-  @Delete('eliminar/usuario/:id/:ip/:puerto/:id2/:ip2/:puerto2')
+  @Delete('eliminar/usuario/:id/:ip/:puerto')
   async eliminarUsuario(
     @Param('puerto', ParseIntPipe) puerto: number,
-    @Param('puerto2', ParseIntPipe) puerto2: number,
+
     @Param('ip') ip: string,
-    @Param('ip2') ip2: string,
+
     @Param('id', ParseIntPipe) id: number,
-    @Param('id2', ParseIntPipe) id2: number,
   ): Promise<any> {
     console.log('eliminar/usuario/:id/:ip/:puerto');
     console.log(ip, puerto);
     // const ips = ["172.16.236.202","172.16.236.102"];
     // for (const iterator of ips) {
-    // const salida = await this._EliminarBiometricoService.eliminar(
-    //   id,
-    //   ip,
-    //   puerto,
-    // );
-    // console.log(salida);
-    // return salida;
+
     //   let inport= Math.random() * (6000 - 5000) + 5000;
     //   let timeout= Math.random() * (6000 - 5000) + 5000;
     //   inport= Math.trunc(inport);
     //   timeout= Math.trunc(timeout);
-    let ZK = new ZKLib({
-      ip: ip,
-      port: puerto,
-      inport: 5200,
-      timeout: 5000,
-    });
-    console.log('instancia', ZK);
-    await ZK.connect(async function (err) {
-      if (err) throw new InternalServerErrorException(err);
 
-      // read the time info from th device
-      await ZK.delUser(id, async function (err, t: any) {
-        // disconnect from the device
-        await ZK.disconnect();
-        ZK = null;
-
-        if (err) throw new InternalServerErrorException(err);
-
-        console.log('Eliminado ');
-      });
-    });
     //}
 
-    setTimeout(() => {
-      const ZK2 = new ZKLib({
-        ip: ip2,
-        port: puerto2,
-        inport: 5200,
-        timeout: 5000,
-      });
-      console.log('instancia↓↓↓↓', ZK);
-      ZK2.connect(function (err) {
-        if (err) throw new InternalServerErrorException(err);
-
-        // read the time info from th device
-        ZK2.delUser(id2, function (err, t) {
-          // disconnect from the device
-          ZK2.disconnect();
-
-          if (err) throw new InternalServerErrorException(err);
-
-          console.log('Eliminado 2');
-        });
-      });
+    setTimeout(async () => {
+      const salida = await this._EliminarBiometricoService.eliminar(
+        id,
+        ip,
+        puerto,
+      );
+      console.log(salida);
+      return salida;
     }, 10000);
 
     // console.log("elimminar usuario",ip,puerto);
