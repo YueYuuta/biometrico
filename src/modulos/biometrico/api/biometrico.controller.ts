@@ -19,6 +19,7 @@ import { LeerBiometricoCasoUso } from '../biometrico-caso-uso/leer';
 import { CrearUsuarioDto } from './dto';
 
 const ZKLib = require('zklib');
+const NZKLib = require('../../../../node_modules/node-zklib');
 
 @Controller({
   path: 'biometrico',
@@ -35,15 +36,29 @@ export class BiometricoController {
   async obtenerUsuarios(
     @Param('puerto', ParseIntPipe) puerto: number,
     @Param('ip') ip: string,
+    // @Param('puerto2', ParseIntPipe) puerto2: number,
+    // @Param('ip2') ip2: string,
   ): Promise<SalidaApi> {
     console.log('obtener usuarios', ip, puerto);
-    const respuesta = await this._leerBiometricoService.obtenerUsuarios(
-      ip,
-      puerto,
-    );
+    let zkInstance = new ZKLib(ip, puerto, 10000, 4000);
+    try {
+      // Create socket to machine
+      await zkInstance.createSocket();
+
+      // Get general info like logCapacity, user counts, logs count
+      // It's really useful to check the status of device
+      console.log(await zkInstance.getInfo());
+    } catch (e) {
+      console.log(e);
+      if (e.code === 'EADDRINUSE') {
+      }
+    }
+
+    const users = await zkInstance.getUsers();
+    await zkInstance.disconnect();
     return {
       status: HttpStatus.OK,
-      data: respuesta,
+      data: users,
     };
   }
 
@@ -80,34 +95,74 @@ export class BiometricoController {
     };
   }
 
-  @Delete('eliminar/usuario/:id/:ip/:puerto')
+  @Delete('eliminar/usuario/:id/:ip/:puerto/:id2/:ip2/:puerto2')
   async eliminarUsuario(
     @Param('puerto', ParseIntPipe) puerto: number,
-
+    @Param('puerto2', ParseIntPipe) puerto2: number,
     @Param('ip') ip: string,
-
+    @Param('ip2') ip2: string,
     @Param('id', ParseIntPipe) id: number,
+    @Param('id2', ParseIntPipe) id2: number,
   ): Promise<any> {
     console.log('eliminar/usuario/:id/:ip/:puerto');
     console.log(ip, puerto);
     // const ips = ["172.16.236.202","172.16.236.102"];
     // for (const iterator of ips) {
-
+    // const salida = await this._EliminarBiometricoService.eliminar(
+    //   id,
+    //   ip,
+    //   puerto,
+    // );
+    // console.log(salida);
+    // return salida;
     //   let inport= Math.random() * (6000 - 5000) + 5000;
     //   let timeout= Math.random() * (6000 - 5000) + 5000;
     //   inport= Math.trunc(inport);
     //   timeout= Math.trunc(timeout);
+    let ZK = new ZKLib({
+      ip: ip,
+      port: puerto,
+      inport: 5200,
+      timeout: 5000,
+    });
+    console.log('instancia', ZK);
+    await ZK.connect(async function (err) {
+      if (err) throw new InternalServerErrorException(err);
 
+      // read the time info from th device
+      await ZK.delUser(id, async function (err, t: any) {
+        // disconnect from the device
+        await ZK.disconnect();
+        ZK = null;
+
+        if (err) throw new InternalServerErrorException(err);
+
+        console.log('Eliminado ');
+      });
+    });
     //}
 
-    setTimeout(async () => {
-      const salida = await this._EliminarBiometricoService.eliminar(
-        id,
-        ip,
-        puerto,
-      );
-      console.log(salida);
-      return salida;
+    setTimeout(() => {
+      const ZK2 = new ZKLib({
+        ip: ip2,
+        port: puerto2,
+        inport: 5200,
+        timeout: 5000,
+      });
+      console.log('instancia↓↓↓↓', ZK);
+      ZK2.connect(function (err) {
+        if (err) throw new InternalServerErrorException(err);
+
+        // read the time info from th device
+        ZK2.delUser(id2, function (err, t) {
+          // disconnect from the device
+          ZK2.disconnect();
+
+          if (err) throw new InternalServerErrorException(err);
+
+          console.log('Eliminado 2');
+        });
+      });
     }, 10000);
 
     // console.log("elimminar usuario",ip,puerto);
@@ -118,7 +173,6 @@ export class BiometricoController {
     //   message:'Usuario eliminado coreectamente!'
     // };
   }
-
   @Post('crear/usuario')
   @UsePipes(new ValidationPipe({ transform: true }))
   async crearUsuario(@Body() usuario: CrearUsuarioDto): Promise<SalidaApi> {
