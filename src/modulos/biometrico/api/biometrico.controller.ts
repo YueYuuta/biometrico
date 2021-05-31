@@ -62,13 +62,16 @@ export class BiometricoController {
   @Delete('eliminar/usuario/:id/:ip/:puerto')
   async eliminarUsuario(@Param('puerto', ParseIntPipe) puerto: number,
   @Param('ip') ip: string,@Param('id', ParseIntPipe) id: number,):Promise<any>{
-    const inport= Math.random() * (6000 - 5000) + 5000;
-    const timeout= Math.random() * (6000 - 5000) + 5000;
+    
     
     console.log("eliminar/usuario/:id/:ip/:puerto");
     console.log(ip,puerto);
     const ips = ["172.16.236.202","172.16.236.102"];
     for (const iterator of ips) {
+      let inport= Math.random() * (6000 - 5000) + 5000;
+      let timeout= Math.random() * (6000 - 5000) + 5000;
+      inport= Math.trunc(inport);
+      timeout= Math.trunc(timeout);
       let ZK = new ZKLib({
         ip: iterator,
         port: puerto,
