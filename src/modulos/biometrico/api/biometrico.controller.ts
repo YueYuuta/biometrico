@@ -62,31 +62,40 @@ export class BiometricoController {
   @Delete('eliminar/usuario/:id/:ip/:puerto')
   async eliminarUsuario(@Param('puerto', ParseIntPipe) puerto: number,
   @Param('ip') ip: string,@Param('id', ParseIntPipe) id: number,):Promise<any>{
+    const inport= Math.random() * (6000 - 5000) + 5000;
+    const timeout= Math.random() * (6000 - 5000) + 5000;
+    
     console.log("eliminar/usuario/:id/:ip/:puerto");
     console.log(ip,puerto);
-    let ZK = new ZKLib({
-      ip: ip,
-      port: puerto,
-      inport: 5200,
-      timeout: 5000,
-    });
-
-    ZK.connect(function(err) {
-      if (err) throw new InternalServerErrorException(err);
-      ;
-     
-      // read the time info from th device
-      ZK.delUser(id,function(err, t) {
-        // disconnect from the device
-        ZK.disconnect();
-        ZK = null;
-        
-     
-        if (err) throw new InternalServerErrorException(err);
-     
-        console.log("Eliminado ");
+    const ips = ["172.16.236.202","172.16.236.102"];
+    for (const iterator of ips) {
+      let ZK = new ZKLib({
+        ip: iterator,
+        port: puerto,
+        inport: inport,
+        timeout: timeout,
       });
-    });
+      console.log("instancia",ZK);
+      ZK.connect(function(err) {
+        if (err) throw new InternalServerErrorException(err);
+        
+       
+        // read the time info from th device
+        ZK.delUser(id,function(err, t) {
+          // disconnect from the device
+          ZK.disconnect();
+          ZK = null;
+          
+       
+          if (err) throw new InternalServerErrorException(err);
+       
+          console.log("Eliminado ");
+        });
+      });
+    }
+   
+   
+   
     // const ZK2 = new ZKLib({
     //   ip: "172.16.236.202",
     //   port: 4370,
