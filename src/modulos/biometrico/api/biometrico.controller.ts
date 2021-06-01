@@ -40,14 +40,14 @@ export class BiometricoController {
     // @Param('ip2') ip2: string,
   ): Promise<SalidaApi> {
     console.log('obtener usuarios', ip, puerto);
-    let zkInstance = new ZKLib(ip, puerto, 10000, 4000);
+    let zkInstance = new NZKLib(ip, puerto, 10000, 4000);
     try {
       // Create socket to machine
       await zkInstance.createSocket();
 
       // Get general info like logCapacity, user counts, logs count
       // It's really useful to check the status of device
-      console.log(await zkInstance.getInfo());
+      console.log("get info",await zkInstance.getInfo());
     } catch (e) {
       console.log(e);
       if (e.code === 'EADDRINUSE') {
