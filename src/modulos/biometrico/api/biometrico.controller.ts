@@ -55,6 +55,7 @@ export class BiometricoController {
     }
 
     const users = await zkInstance.getUsers();
+    console.log("usuarios",users);
     await zkInstance.disconnect();
     return {
       status: HttpStatus.OK,
@@ -163,7 +164,7 @@ export class BiometricoController {
           console.log('Eliminado 2');
         });
       });
-    }, 10000);
+    }, 15000);
 
     // console.log("elimminar usuario",ip,puerto);
     //  const respuesta= await this._EliminarBiometricoService.eliminar(id,ip,puerto);
