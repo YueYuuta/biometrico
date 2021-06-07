@@ -54,13 +54,19 @@ export class BiometricoController {
       }
     }
 
-    const users = await zkInstance.getUsers();
-    console.log("usuarios",users);
-    await zkInstance.disconnect();
-    return {
-      status: HttpStatus.OK,
-      data: users,
-    };
+    try {
+      const users = await zkInstance.getUsers();
+      console.log("usuarios",users);
+      await zkInstance.disconnect();
+      return {
+        status: HttpStatus.OK,
+        data: users,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(error)
+      
+    }
+   
   }
 
   @Get('asistencias/:ip/:puerto')

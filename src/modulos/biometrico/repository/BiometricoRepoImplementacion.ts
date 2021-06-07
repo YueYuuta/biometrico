@@ -64,7 +64,14 @@ export class BiometricoRepoService implements IBiometricoCasoUso {
     await Instancia.disconnect();
   }
   async obtenerRegistroAsistencias(Instancia: any): Promise<any> {
-    return await Instancia.getAttendances();
+    try {
+      return await Instancia.getAttendances();
+    } catch (error) {
+      console.log('esto solo es para ver en la consola no es por que se cae :3',error);
+      return null;
+      
+    }
+    
   }
   async instanciaNodeZklib(ip: string, puerto: number): Promise<any> {
     let zkInstance = new NZKLib(ip, puerto, 10000, 4000);
